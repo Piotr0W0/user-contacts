@@ -1,4 +1,4 @@
-package pl.edu.wat.lab.usercontacts.exception;
+package pl.edu.wat.lab.usercontacts.exception.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

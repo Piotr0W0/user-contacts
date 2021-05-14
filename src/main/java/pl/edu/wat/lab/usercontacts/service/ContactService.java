@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.wat.lab.usercontacts.dto.contact.ContactRequest;
 import pl.edu.wat.lab.usercontacts.dto.contact.ContactResponse;
-import pl.edu.wat.lab.usercontacts.exception.UserNotFoundException;
+import pl.edu.wat.lab.usercontacts.exception.contact.ContactForUserNotFoundException;
+import pl.edu.wat.lab.usercontacts.exception.contact.ContactNotFoundException;
+import pl.edu.wat.lab.usercontacts.exception.user.UserNotFoundException;
 import pl.edu.wat.lab.usercontacts.model.Contact;
 import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.repository.ContactRepository;
@@ -26,9 +28,7 @@ public class ContactService {
     }
 
     public List<ContactResponse> getAllContacts(int userId) {
-        Optional<User> user = userRepository.findById(userId);
-        return user
-                .get()
+        return findUser(userId)
                 .getContacts()
                 .stream()
                 .map(contact -> new ContactResponse(contact.getContactId(), contact.getName(), contact.getPhoneNumber()))
@@ -36,47 +36,60 @@ public class ContactService {
     }
 
     public ContactResponse getContact(int userId, int contactId) {
-        Optional<User> user = userRepository.findById(userId);
-        ContactResponse c = user
-                .get()
+        Optional<ContactResponse> contactResponse = findUser(userId)
                 .getContacts()
                 .stream()
                 .map(contact -> new ContactResponse(contact.getContactId(), contact.getName(), contact.getPhoneNumber()))
-                .filter(contactResponse -> contactResponse.getId() == contactId).findFirst().get();
-        return c;
+                .filter(contactFilter -> contactFilter.getId() == contactId).findFirst();
+        if (contactResponse.isEmpty()) {
+            throw new ContactForUserNotFoundException(contactId, userId);
+        } else {
+            return contactResponse.get();
+        }
     }
 
-    public Contact postContact(int userId, ContactRequest contactRequest) {
-        Optional<User> user = userRepository.findById(userId);
-        Contact contact = new Contact();
-        if(!contactRequest.hasInvalidAttributes()) {
+    public Optional<Contact> postContact(int userId, ContactRequest contactRequest) {
+        if (!contactRequest.hasInvalidAttributes()) {
+            Contact contact = new Contact();
             contact.setName(contactRequest.getName());
             contact.setPhoneNumber(contactRequest.getPhoneNumber());
-            contact.setUser(user.get());
+            contact.setUser(findUser(userId));
             contactRepository.save(contact);
+            return Optional.of(contact);
+        } else {
+            return Optional.empty();
         }
-        return contact;
     }
 
     public Optional<Contact> updateContact(int userId, int contactId, ContactRequest contactRequest) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<Contact> contactOptional = contactRepository.findById(contactId);
-        if(contactOptional.isPresent() && !contactRequest.hasInvalidAttributes()) {
-            contactOptional.get().setName(contactRequest.getName());
-            contactOptional.get().setPhoneNumber(contactRequest.getPhoneNumber());
-            contactRepository.save(contactOptional.get());
+        Contact contact = contactRepository
+                .findById(contactId)
+                .orElseThrow(() -> new ContactNotFoundException(contactId));
+        if (!findUser(userId).getContacts().contains(contact)) {
+            throw new ContactForUserNotFoundException(contactId, userId);
         }
-        return Optional.of(contactOptional.get());
+        if(!contactRequest.hasInvalidAttributes()){
+            contact.setName(contactRequest.getName());
+            contact.setPhoneNumber(contactRequest.getPhoneNumber());
+            contactRepository.save(contact);
+        }
+        return Optional.of(contact);
     }
 
     public void deleteContact(int userId, int contactId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<Contact> contactOptional = contactRepository.findById(contactId);
-        if(contactOptional.get().getUser().getUserId() == userId){
-            System.out.println(contactOptional.get().getUser().getUserId());System.out.println(userId);System.out.println(user.get().getUserId());;System.out.println(contactOptional.get().getContactId());
-            contactRepository.delete(contactRepository.findById(contactId).get());
-        }else{
-            throw new RuntimeException("Could not find contact with id = " + contactId + " in user with id " + userId + " set");
+        Contact contact = contactRepository
+                .findById(contactId)
+                .orElseThrow(() -> new ContactNotFoundException(contactId));
+        if (contact.getUser().getUserId() == userId) {
+            contactRepository.delete(contact);
+        } else {
+            throw new ContactForUserNotFoundException(contactId, userId);
         }
+    }
+
+    private User findUser(int userId) {
+        return userRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }

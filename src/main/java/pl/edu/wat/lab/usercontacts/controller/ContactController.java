@@ -6,12 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wat.lab.usercontacts.dto.contact.ContactRequest;
 import pl.edu.wat.lab.usercontacts.dto.contact.ContactResponse;
-import pl.edu.wat.lab.usercontacts.dto.user.UserRequest;
-import pl.edu.wat.lab.usercontacts.dto.user.UserResponse;
 import pl.edu.wat.lab.usercontacts.model.Contact;
-import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.service.ContactService;
-import pl.edu.wat.lab.usercontacts.service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +33,21 @@ public class ContactController {
     }
 
     @PostMapping("{userId}")
-    public ResponseEntity<Contact> postContact(@PathVariable int userId, @RequestBody ContactRequest contactRequest) {
-        return new ResponseEntity<>(contactService.postContact(userId, contactRequest), HttpStatus.CREATED);
+    public ResponseEntity<String> postContact(@PathVariable int userId, @RequestBody ContactRequest contactRequest) {
+        Optional<Contact> contact = contactService.postContact(userId, contactRequest);
+        if (contact.isPresent()) {
+            return new ResponseEntity<>("Contact was created", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{userId}/{contactId}")
     public ResponseEntity<Contact> updateContact(@PathVariable int userId, @PathVariable int contactId, @RequestBody ContactRequest contactRequest) {
-        return new ResponseEntity<>(contactService.updateContact(userId, contactId, contactRequest).get(), HttpStatus.OK);
+        return contactService
+                .updateContact(userId, contactId, contactRequest)
+                .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @DeleteMapping("/{userId}/{contactId}")

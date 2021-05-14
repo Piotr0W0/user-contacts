@@ -1,4 +1,4 @@
-package pl.edu.wat.lab.usercontacts.exception;
+package pl.edu.wat.lab.usercontacts.exception.user;
 
 public class UserNotFoundException extends RuntimeException{
 

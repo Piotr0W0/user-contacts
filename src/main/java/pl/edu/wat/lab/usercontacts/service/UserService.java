@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.wat.lab.usercontacts.dto.user.UserRequest;
 import pl.edu.wat.lab.usercontacts.dto.user.UserResponse;
-import pl.edu.wat.lab.usercontacts.exception.UserNotFoundException;
+import pl.edu.wat.lab.usercontacts.exception.user.UserNotFoundException;
 import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.repository.UserRepository;
 
