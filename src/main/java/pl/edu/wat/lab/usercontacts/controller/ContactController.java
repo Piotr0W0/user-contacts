@@ -1,6 +1,7 @@
 package pl.edu.wat.lab.usercontacts.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,6 @@ import pl.edu.wat.lab.usercontacts.dto.contact.ContactResponse;
 import pl.edu.wat.lab.usercontacts.model.Contact;
 import pl.edu.wat.lab.usercontacts.service.ContactService;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,8 +23,18 @@ public class ContactController {
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<List<ContactResponse>> getAllContacts(@PathVariable int userId) {
-        return new ResponseEntity<>(contactService.getAllContacts(userId), HttpStatus.OK);
+    public ResponseEntity<Page<ContactResponse>> getAllContacts(@PathVariable int userId,
+                                                                @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                @RequestParam(value = "size", defaultValue = "10") int size) {
+        return new ResponseEntity<>(contactService.getAllContacts(userId, page, size), HttpStatus.OK);
+    }
+
+    @GetMapping("{userId}/filtered")
+    public ResponseEntity<Page<ContactResponse>> getFilteredContacts(@PathVariable int userId,
+                                                                     @RequestParam(value = "name", required = false) String name,
+                                                                     @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
+        return new ResponseEntity<>(contactService.getFilteredContacts(userId, name, page, size), HttpStatus.OK);
     }
 
     @GetMapping("{userId}/{contactId}")

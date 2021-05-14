@@ -14,6 +14,5 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
     Stream<Contact> streamAllByUser(User user);
 
-    // TODO: Pagination
     Page<Contact> findAllByUser(User user, Pageable pageable);
 }

@@ -1,13 +1,20 @@
 package pl.edu.wat.lab.usercontacts.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pl.edu.wat.lab.usercontacts.dto.contact.ContactResponse;
 import pl.edu.wat.lab.usercontacts.dto.user.UserRequest;
 import pl.edu.wat.lab.usercontacts.dto.user.UserResponse;
 import pl.edu.wat.lab.usercontacts.exception.user.UserNotFoundException;
 import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +33,28 @@ public class UserService {
                 .stream()
                 .map(user -> new UserResponse(user.getUserId(), user.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional // it's not needed
+    public Page<UserResponse> getFilteredUsers(String name, int page, int size) {
+        List<UserResponse> users = userRepository.streamAllBy()
+                .filter(user -> name == null || name.equals(user.getName()))
+                .map(user -> new UserResponse(user.getUserId(), user.getName()))
+                .collect(Collectors.toList());
+
+        List<UserResponse> pageToReturn = new ArrayList<>();
+        int startIndex = page * size;
+        int endIndex = startIndex + size;
+
+        if (users.size() < endIndex) {
+            endIndex = users.size();
+        }
+
+        for (int i = startIndex; i < endIndex; i++) {
+            pageToReturn.add(users.get(i));
+        }
+
+        return new PageImpl<>(pageToReturn, PageRequest.of(page, size, Sort.by("name").ascending()), users.size());
     }
 
     public UserResponse getUser(int userId) {

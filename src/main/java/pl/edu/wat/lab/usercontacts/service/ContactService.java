@@ -1,7 +1,12 @@
 package pl.edu.wat.lab.usercontacts.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.wat.lab.usercontacts.dto.contact.ContactRequest;
 import pl.edu.wat.lab.usercontacts.dto.contact.ContactResponse;
 import pl.edu.wat.lab.usercontacts.exception.contact.ContactForUserNotFoundException;
@@ -12,6 +17,7 @@ import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.repository.ContactRepository;
 import pl.edu.wat.lab.usercontacts.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,12 +33,31 @@ public class ContactService {
         this.userRepository = userRepository;
     }
 
-    public List<ContactResponse> getAllContacts(int userId) {
-        return findUser(userId)
-                .getContacts()
-                .stream()
+    public Page<ContactResponse> getAllContacts(int userId, int page, int size) {
+        return contactRepository.findAllByUser(findUser(userId), PageRequest.of(page, size, Sort.by("name").ascending()))
+                .map(contact -> new ContactResponse(contact.getContactId(), contact.getName(), contact.getPhoneNumber()));
+    }
+
+    @Transactional // it's not needed
+    public Page<ContactResponse> getFilteredContacts(int userId, String name, int page, int size) {
+        List<ContactResponse> contacts = contactRepository.streamAllByUser(findUser(userId))
+                .filter(contact -> name == null || name.equals(contact.getName()))
                 .map(contact -> new ContactResponse(contact.getContactId(), contact.getName(), contact.getPhoneNumber()))
                 .collect(Collectors.toList());
+
+        List<ContactResponse> pageToReturn = new ArrayList<>();
+        int startIndex = page * size;
+        int endIndex = startIndex + size;
+
+        if (contacts.size() < endIndex) {
+            endIndex = contacts.size();
+        }
+
+        for (int i = startIndex; i < endIndex; i++) {
+            pageToReturn.add(contacts.get(i));
+        }
+
+        return new PageImpl<>(pageToReturn, PageRequest.of(page, size, Sort.by("name").ascending()), contacts.size());
     }
 
     public ContactResponse getContact(int userId, int contactId) {
