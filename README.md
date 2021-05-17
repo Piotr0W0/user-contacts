@@ -25,7 +25,7 @@ Login, registration data validation and email verification after creating accoun
 # Plans for the future
 * Redis JWT Secret storage for each user
 * Logout from all accounts
-* Password change
+* Password change before sign in
 * Admin API
 
 # Technologies used
