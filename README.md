@@ -8,7 +8,7 @@
 * [How to run it?](#how-to-run-it)
 * [How to use this API?](#how-to-use-this-api)
     * [Registration and login](#registration-and-login)
-    * [Expense](#expense)
+    * [Contact](#contact)
 
 # About the project
 UserContacts is a web application that allows people to store their contacts. 
