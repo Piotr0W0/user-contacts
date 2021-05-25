@@ -93,7 +93,7 @@ public class ContactService {
         if (!findUser(userId).getContacts().contains(contact)) {
             throw new ContactForUserNotFoundException(contactId, userId);
         }
-        if(!contactRequest.hasInvalidAttributes()){
+        if (!contactRequest.hasInvalidAttributes()) {
             contact.setName(contactRequest.getName());
             contact.setPhoneNumber(contactRequest.getPhoneNumber());
             contactRepository.save(contact);

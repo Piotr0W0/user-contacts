@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.wat.lab.usercontacts.dto.contact.ContactResponse;
 import pl.edu.wat.lab.usercontacts.dto.user.UserRequest;
 import pl.edu.wat.lab.usercontacts.dto.user.UserResponse;
 import pl.edu.wat.lab.usercontacts.exception.user.UserNotFoundException;

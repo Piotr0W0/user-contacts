@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.wat.lab.usercontacts.dto.contact.ContactResponse;
 import pl.edu.wat.lab.usercontacts.dto.user.UserRequest;
 import pl.edu.wat.lab.usercontacts.dto.user.UserResponse;
 import pl.edu.wat.lab.usercontacts.model.User;
@@ -31,8 +30,8 @@ public class UserController {
 
     @GetMapping("filtered")
     public ResponseEntity<Page<UserResponse>> getFilteredUsers(@RequestParam(value = "name", required = false) String name,
-                                                                     @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
+                                                               @RequestParam(value = "page", defaultValue = "0") int page,
+                                                               @RequestParam(value = "size", defaultValue = "10") int size) {
         return new ResponseEntity<>(userService.getFilteredUsers(name, page, size), HttpStatus.OK);
     }
 
