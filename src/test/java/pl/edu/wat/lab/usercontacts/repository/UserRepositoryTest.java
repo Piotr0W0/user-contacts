@@ -1,11 +1,5 @@
 package pl.edu.wat.lab.usercontacts.repository;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.HashSet;
-import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,6 +7,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
 import pl.edu.wat.lab.usercontacts.model.Contact;
 import pl.edu.wat.lab.usercontacts.model.User;
+
+import java.util.HashSet;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ContextConfiguration(classes = {UserRepository.class})
 @EnableAutoConfiguration

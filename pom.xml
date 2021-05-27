@@ -61,11 +61,11 @@
             <version>2.9.2</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.mapstruct</groupId>-->
-<!--            <artifactId>mapstruct</artifactId>-->
-<!--            <version>${org.mapstruct.version}</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.mapstruct</groupId>-->
+        <!--            <artifactId>mapstruct</artifactId>-->
+        <!--            <version>${org.mapstruct.version}</version>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -82,35 +82,35 @@
                     </excludes>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.6.1</version>-->
-<!--                <configuration>-->
-<!--                    <source>11</source>-->
-<!--                    <target>11</target>-->
-<!--                    <annotationProcessorPaths>-->
-<!--                        <path>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok</artifactId>-->
-<!--                            <version>1.18.20</version>-->
-<!--                        </path>-->
-<!--                        &lt;!&ndash; This is needed when using Lombok 1.18.16 and above &ndash;&gt;-->
-<!--                        <path>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok-mapstruct-binding</artifactId>-->
-<!--                            <version>0.2.0</version>-->
-<!--                        </path>-->
-<!--                        &lt;!&ndash; Mapstruct should follow the lombok path(s) &ndash;&gt;-->
-<!--                        <path>-->
-<!--                            <groupId>org.mapstruct</groupId>-->
-<!--                            <artifactId>mapstruct-processor</artifactId>-->
-<!--                            &lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;-->
-<!--                            <version>${org.mapstruct.version}</version>-->
-<!--                        </path>-->
-<!--                    </annotationProcessorPaths>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+            <!--                <version>3.6.1</version>-->
+            <!--                <configuration>-->
+            <!--                    <source>11</source>-->
+            <!--                    <target>11</target>-->
+            <!--                    <annotationProcessorPaths>-->
+            <!--                        <path>-->
+            <!--                            <groupId>org.projectlombok</groupId>-->
+            <!--                            <artifactId>lombok</artifactId>-->
+            <!--                            <version>1.18.20</version>-->
+            <!--                        </path>-->
+            <!--                        &lt;!&ndash; This is needed when using Lombok 1.18.16 and above &ndash;&gt;-->
+            <!--                        <path>-->
+            <!--                            <groupId>org.projectlombok</groupId>-->
+            <!--                            <artifactId>lombok-mapstruct-binding</artifactId>-->
+            <!--                            <version>0.2.0</version>-->
+            <!--                        </path>-->
+            <!--                        &lt;!&ndash; Mapstruct should follow the lombok path(s) &ndash;&gt;-->
+            <!--                        <path>-->
+            <!--                            <groupId>org.mapstruct</groupId>-->
+            <!--                            <artifactId>mapstruct-processor</artifactId>-->
+            <!--                            &lt;!&ndash;suppress UnresolvedMavenProperty &ndash;&gt;-->
+            <!--                            <version>${org.mapstruct.version}</version>-->
+            <!--                        </path>-->
+            <!--                    </annotationProcessorPaths>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 
