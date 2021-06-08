@@ -16,8 +16,9 @@ public class SwaggerConfiguration {
     public Docket get() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .paths(PathSelectors.ant("/api/**"))
-                .apis(RequestHandlerSelectors.basePackage("pl.edu.wat.lab.usercontacts"))
+                .paths(PathSelectors.ant("/api/v1/**"))
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
                 .build();
     }
 }

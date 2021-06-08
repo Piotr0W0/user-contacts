@@ -1,23 +1,19 @@
 package pl.edu.wat.lab.usercontacts.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.wat.lab.usercontacts.dto.user.UserRequest;
-import pl.edu.wat.lab.usercontacts.dto.user.UserResponse;
+import pl.edu.wat.lab.usercontacts.dto.UserRequest;
 import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
-
 
     @Autowired
     public UserController(UserService userService) {
@@ -25,44 +21,33 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
-    }
-
-    @GetMapping("filtered")
-    public ResponseEntity<Page<UserResponse>> getFilteredUsers(@RequestParam(value = "name", required = false) String name,
-                                                               @RequestParam(value = "page", defaultValue = "0") int page,
-                                                               @RequestParam(value = "size", defaultValue = "10") int size) {
-        return new ResponseEntity<>(userService.getFilteredUsers(name, page, size), HttpStatus.OK);
+    public ResponseEntity<?> getAllUsers() {
+        List<User> allUsers = userService.getAllUsers();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable int userId) {
-        return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
+    public ResponseEntity<?> getUser(@PathVariable Long userId) {
+        User user = userService.getUser(userId);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<String> postUser(@RequestBody UserRequest userRequest) {
-        Optional<User> user = userService.postUser(userRequest);
-        if (user.isPresent()) {
-            return new ResponseEntity<>("User was created", HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> postUser(@RequestBody UserRequest userRequest) {
+        User user = userService.postUser(userRequest);
+        return new ResponseEntity<>("User with id " + user.getUserId() + " was created", HttpStatus.CREATED);
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable int userId, @RequestBody UserRequest userRequest) {
-        return userService
-                .updateUser(userId, userRequest)
-                .map(response -> new ResponseEntity<>(response, HttpStatus.CREATED))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    @PatchMapping("/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody UserRequest userRequest) {
+        User user = userService.updateUser(userId, userRequest);
+        return new ResponseEntity<>("User with id " + user.getUserId() + " was updated", HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable int userId) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
-        return new ResponseEntity<>("User was deleted", HttpStatus.OK);
+        return new ResponseEntity<>("User with id " + userId + " was deleted", HttpStatus.OK);
     }
 
 }

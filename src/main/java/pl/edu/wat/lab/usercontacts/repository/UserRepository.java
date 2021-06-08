@@ -4,12 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pl.edu.wat.lab.usercontacts.model.User;
 
-import java.util.stream.Stream;
-
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-
-    Stream<User> streamAllBy();
-
+public interface UserRepository extends JpaRepository<User, Long> {
 }
 
