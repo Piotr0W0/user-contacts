@@ -17,13 +17,6 @@ public class ContactRequest {
     @JsonProperty("email_address")
     private String emailAddress;
 
-    public boolean hasInvalidAttributes() {
-        return name == null || phoneNumber == null || emailAddress == null ||
-                !phoneNumber.matches("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
-                        + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-                        + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$");
-    }
-
     @Override
     public String toString() {
         return "ContactRequest { " +

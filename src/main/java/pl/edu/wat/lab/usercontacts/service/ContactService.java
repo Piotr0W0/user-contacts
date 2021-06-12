@@ -10,6 +10,7 @@ import pl.edu.wat.lab.usercontacts.model.Contact;
 import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.repository.ContactRepository;
 import pl.edu.wat.lab.usercontacts.repository.UserRepository;
+import pl.edu.wat.lab.usercontacts.validation.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class ContactService {
     }
 
     public Contact postContact(Long userId, ContactRequest contactRequest) {
-        if (!contactRequest.hasInvalidAttributes()) {
+        if (Validator.checkId(userId) && Validator.checkAttributes(contactRequest)) {
             Contact contact = new Contact();
             contact.setName(contactRequest.getName());
             contact.setPhoneNumber(contactRequest.getPhoneNumber());
@@ -49,8 +50,8 @@ public class ContactService {
     }
 
     public Contact updateContact(Long contactId, ContactRequest contactRequest) {
+        if (Validator.checkId(contactId) && Validator.checkAttributes(contactRequest)) {
         Contact contact = findContact(contactId);
-        if (!contactRequest.hasInvalidAttributes()) {
             contact.setName(contactRequest.getName());
             contact.setPhoneNumber(contactRequest.getPhoneNumber());
             contact.setEmailAddress(contactRequest.getEmailAddress());
