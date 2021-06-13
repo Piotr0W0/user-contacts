@@ -31,10 +31,10 @@ public class ContactService {
         return new ArrayList<>(user.getContacts());
     }
 
-    public Contact getContact(Long contactId) {
-        Contact contact = findContact(contactId);
-        return contact;
-    }
+//    public Contact getContact(Long contactId) {
+//        Contact contact = findContact(contactId);
+//        return contact;
+//    }
 
     public Contact postContact(Long userId, ContactRequest contactRequest) {
         if (Validator.checkId(userId) && Validator.checkAttributes(contactRequest)) {
@@ -51,7 +51,7 @@ public class ContactService {
 
     public Contact updateContact(Long contactId, ContactRequest contactRequest) {
         if (Validator.checkId(contactId) && Validator.checkAttributes(contactRequest)) {
-        Contact contact = findContact(contactId);
+            Contact contact = findContact(contactId);
             contact.setName(contactRequest.getName());
             contact.setPhoneNumber(contactRequest.getPhoneNumber());
             contact.setEmailAddress(contactRequest.getEmailAddress());

@@ -23,10 +23,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(Long userId) {
-        User user = findUser(userId);
-        return user;
-    }
+//    public User getUser(Long userId) {
+//        User user = findUser(userId);
+//        return user;
+//    }
 
     public User postUser(UserRequest userRequest) {
         if (!userRequest.hasInvalidAttributes()) {

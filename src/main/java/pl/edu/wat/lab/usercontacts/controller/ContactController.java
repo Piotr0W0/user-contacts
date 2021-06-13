@@ -27,11 +27,11 @@ public class ContactController {
         return new ResponseEntity<>(allContacts, HttpStatus.OK);
     }
 
-    @GetMapping("/{contactId}")
-    public ResponseEntity<?> getContact(@PathVariable Long contactId) {
-        Contact contact = contactService.getContact(contactId);
-        return new ResponseEntity<>(contact, HttpStatus.OK);
-    }
+//    @GetMapping("/{contactId}")
+//    public ResponseEntity<?> getContact(@PathVariable Long contactId) {
+//        Contact contact = contactService.getContact(contactId);
+//        return new ResponseEntity<>(contact, HttpStatus.OK);
+//    }
 
     @PostMapping("/{userId}")
     public ResponseEntity<?> postContact(@PathVariable Long userId, @RequestBody ContactRequest contactRequest) {
