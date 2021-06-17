@@ -10,10 +10,6 @@ import lombok.Setter;
 public class UserRequest {
     private String name;
 
-    public boolean hasInvalidAttributes() {
-        return name == null;
-    }
-
     @Override
     public String toString() {
         return "UserRequest { " +

@@ -14,6 +14,7 @@ import pl.edu.wat.lab.usercontacts.validation.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContactService {
@@ -37,7 +38,8 @@ public class ContactService {
 //    }
 
     public Contact postContact(Long userId, ContactRequest contactRequest) {
-        if (Validator.checkId(userId) && Validator.checkAttributes(contactRequest)) {
+        if (Validator.checkId(userId) && Validator.checkContactAttributes(contactRequest)
+                && findUser(userId).getContacts().stream().noneMatch(c -> c.getName().equals(contactRequest.getName()))) {
             Contact contact = new Contact();
             contact.setName(contactRequest.getName());
             contact.setPhoneNumber(contactRequest.getPhoneNumber());
@@ -50,7 +52,9 @@ public class ContactService {
     }
 
     public Contact updateContact(Long contactId, ContactRequest contactRequest) {
-        if (Validator.checkId(contactId) && Validator.checkAttributes(contactRequest)) {
+        Optional<Contact> optionalContact = findContact(contactId).getUser().getContacts().stream().filter(u -> u.getName().equals(contactRequest.getName())).findFirst();
+        if (Validator.checkId(contactId) && Validator.checkContactAttributes(contactRequest)
+                && (optionalContact.isEmpty() || optionalContact.get().getContactId().equals(contactId))) {
             Contact contact = findContact(contactId);
             contact.setName(contactRequest.getName());
             contact.setPhoneNumber(contactRequest.getPhoneNumber());

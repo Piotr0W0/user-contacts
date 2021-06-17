@@ -7,8 +7,10 @@ import pl.edu.wat.lab.usercontacts.exception.badrequest.BadRequestException;
 import pl.edu.wat.lab.usercontacts.exception.user.UserNotFoundException;
 import pl.edu.wat.lab.usercontacts.model.User;
 import pl.edu.wat.lab.usercontacts.repository.UserRepository;
+import pl.edu.wat.lab.usercontacts.validation.Validator;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -29,7 +31,8 @@ public class UserService {
 //    }
 
     public User postUser(UserRequest userRequest) {
-        if (!userRequest.hasInvalidAttributes()) {
+        if (Validator.checkUserAttributes(userRequest) &&
+                userRepository.findAll().stream().noneMatch(u -> u.getName().equals(userRequest.getName()))) {
             User user = new User();
             user.setName(userRequest.getName());
             userRepository.save(user);
@@ -39,10 +42,16 @@ public class UserService {
     }
 
     public User updateUser(Long userId, UserRequest userRequest) {
-        User user = findUser(userId);
-        user.setName(userRequest.getName());
-        userRepository.save(user);
-        return user;
+        Optional<User> optionalUser = userRepository.findAll().stream().filter(u -> u.getName().equals(userRequest.getName())).findFirst();
+        if (Validator.checkUserAttributes(userRequest) && (optionalUser.isEmpty() || optionalUser.get().getUserId().equals(userId))) {
+            {
+                User user = findUser(userId);
+                user.setName(userRequest.getName());
+                userRepository.save(user);
+                return user;
+            }
+        }
+        throw new BadRequestException("Bad request data: " + userRequest);
     }
 
     public void deleteUser(Long userId) {

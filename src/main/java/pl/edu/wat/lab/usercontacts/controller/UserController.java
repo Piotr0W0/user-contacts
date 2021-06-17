@@ -21,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> getAllUsers() {
         List<User> allUsers = userService.getAllUsers();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
@@ -33,7 +33,7 @@ public class UserController {
 //        return new ResponseEntity<>(user, HttpStatus.OK);
 //    }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<?> postUser(@RequestBody UserRequest userRequest) {
         User user = userService.postUser(userRequest);
         return new ResponseEntity<>("User with id " + user.getUserId() + " was created", HttpStatus.CREATED);
