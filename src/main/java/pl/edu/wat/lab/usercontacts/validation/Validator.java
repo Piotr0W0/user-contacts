@@ -11,10 +11,12 @@ public class Validator {
     public static boolean checkAttributes(ContactRequest contactRequest) {
         return !(contactRequest.getName() == null ||
                 contactRequest.getPhoneNumber() == null ||
-                contactRequest.getEmailAddress() == null ||
-                EmailValidator.getInstance().isValid(contactRequest.getEmailAddress()) ||
+                contactRequest.getEmailAddress() == null
+                ||
+                !EmailValidator.getInstance().isValid(contactRequest.getEmailAddress()) ||
                 !contactRequest.getPhoneNumber().matches("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
                         + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-                        + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$"));
+                        + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")
+        );
     }
 }
